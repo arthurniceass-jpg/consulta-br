@@ -18,13 +18,14 @@ describe('BrasilApiService', () => {
 
   afterEach(() => http.verify());
 
-  it('lista os bancos sem os que não têm código, ordenados pelo código', () => {
+  it('lista os bancos sem os que não têm código (null ou 0), ordenados pelo código', () => {
     let codigos: number[] = [];
     service.getBancos().subscribe((bancos) => (codigos = bancos.map((b) => b.code)));
 
     http.expectOne(`${URL}/banks/v1`).flush([
       { ispb: '1', name: 'B', code: 341, fullName: 'B' },
       { ispb: '2', name: 'Sem código', code: null, fullName: 'X' },
+      { ispb: '4', name: 'Câmara B3', code: 0, fullName: 'Câmara B3' },
       { ispb: '3', name: 'A', code: 1, fullName: 'A' },
     ]);
 

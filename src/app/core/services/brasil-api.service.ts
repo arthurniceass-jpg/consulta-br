@@ -10,7 +10,7 @@ import type { Empresa } from '../models/empresa.model';
 import type { Feriado } from '../models/feriado.model';
 import { somenteDigitos } from '../utils/somente-digitos';
 
-/** Banco como a API devolve: alguns vêm sem código (code: null). */
+/** Banco como a API devolve: alguns vêm sem código (code: null) e as câmaras da B3 vêm com code 0. */
 type BancoApi = Omit<Banco, 'code'> & { code: number | null };
 
 /** Tempo máximo de espera por uma resposta da API. */
@@ -28,11 +28,11 @@ export class BrasilApiService {
   /** Cache da lista de bancos: são ~470 itens que quase nunca mudam. */
   private bancos$?: Observable<Banco[]>;
 
-  /** GET /banks/v1: todos os bancos com código, ordenados pelo código (001, 033, 104...). */
+  /** GET /banks/v1: todos os bancos com código válido, ordenados pelo código (001, 033, 104...). */
   getBancos(): Observable<Banco[]> {
     this.bancos$ ??= this.http.get<BancoApi[]>(`${this.baseUrl}/banks/v1`).pipe(
       timeout(TEMPO_LIMITE_MS),
-      map((bancos) => bancos.filter((b): b is Banco => b.code !== null).sort((a, b) => a.code - b.code)),
+      map((bancos) => bancos.filter((b): b is Banco => !!b.code).sort((a, b) => a.code - b.code)),
       // guarda a resposta; se der erro, a próxima chamada tenta de novo
       shareReplay(1),
     );

@@ -1,0 +1,96 @@
+ion-searchbar {
+  --border-radius: 14px;
+  --box-shadow: none;
+  --background: var(--cb-surface);
+  padding-top: 0;
+}
+
+.lista {
+  margin: 0;
+  border-radius: var(--cb-radius);
+  border: 1px solid var(--cb-border);
+  box-shadow: var(--cb-shadow);
+
+  ion-item {
+    --padding-start: 14px;
+    --min-height: 68px;
+  }
+
+  app-banco-logo {
+    margin: 10px 14px 10px 0;
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  p {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.codigo {
+  align-self: center;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ion-color-primary);
+  background: rgba(var(--ion-color-primary-rgb), 0.1);
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.esqueleto-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+.populares {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 2px 2px 8px;
+  margin: 0 -16px;
+  padding-inline: 16px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.popular {
+  flex: none;
+  width: 92px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 6px;
+  border-radius: var(--cb-radius-sm);
+  background: var(--cb-surface);
+  border: 1px solid var(--cb-border);
+  box-shadow: var(--cb-shadow);
+  text-decoration: none;
+  color: var(--cb-text);
+  scroll-snap-align: start;
+
+  span {
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

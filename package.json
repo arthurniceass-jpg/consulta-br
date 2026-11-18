@@ -48,7 +48,6 @@
     "typescript-eslint": "^8.61.0",
     "vitest": "^4.0.8"
   },
-  "prettier": "@ionic/prettier-config",
   "description": "Consulta BR — app Ionic que consulta bancos, CNPJ, CEP e feriados pela BrasilAPI",
   "engines": {
     "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
