@@ -9,6 +9,7 @@ import { BrasilApiService } from '../../core/services/brasil-api.service';
 import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 import { somenteDigitos } from '../../core/utils/somente-digitos';
 import { cnpjValido } from '../../core/utils/validar-cnpj';
+import { CepPipe } from '../../shared/pipes/cep.pipe';
 
 type TipoBusca = 'cnpj' | 'cep';
 
@@ -23,7 +24,7 @@ const ATALHOS = [
   selector: 'app-inicio',
   templateUrl: 'inicio.page.html',
   styleUrls: ['inicio.page.scss'],
-  imports: [RouterLink, IonContent, IonSegment, IonSegmentButton, IonInput, IonButton, IonIcon, IonSpinner],
+  imports: [RouterLink, IonContent, IonSegment, IonSegmentButton, IonInput, IonButton, IonIcon, IonSpinner, CepPipe],
 })
 export class InicioPage {
   private readonly api = inject(BrasilApiService);

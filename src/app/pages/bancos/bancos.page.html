@@ -42,7 +42,7 @@
           @for (banco of populares(); track banco.code) {
             <a class="popular" [routerLink]="['/bancos', banco.code]">
               <app-banco-logo [nome]="banco.name" [codigo]="banco.code" [logoUrl]="banco.logo_url" tamanho="48px" />
-              <span>{{ banco.name }}</span>
+              <span>{{ banco.name | titlecase }}</span>
             </a>
           }
         </div>
@@ -56,8 +56,8 @@
             <ion-item [routerLink]="['/bancos', banco.code]" [button]="true" [detail]="true" lines="full">
               <app-banco-logo slot="start" [nome]="banco.name" [codigo]="banco.code" [logoUrl]="banco.logo_url" />
               <ion-label>
-                <h3>{{ banco.name }}</h3>
-                <p>{{ banco.fullName }}</p>
+                <h3>{{ banco.name | titlecase }}</h3>
+                <p>{{ banco.fullName | titlecase }}</p>
               </ion-label>
               <ion-note slot="end" class="codigo">{{ codigo(banco) }}</ion-note>
             </ion-item>

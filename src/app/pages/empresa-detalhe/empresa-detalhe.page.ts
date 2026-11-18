@@ -1,3 +1,4 @@
+import { CurrencyPipe, DatePipe, TitleCasePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -31,6 +32,9 @@ import type { Empresa } from '../../core/models/empresa.model';
 import { BrasilApiService } from '../../core/services/brasil-api.service';
 import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 import { EstadoComponent } from '../../shared/components/estado/estado.component';
+import { CepPipe } from '../../shared/pipes/cep.pipe';
+import { CnpjPipe } from '../../shared/pipes/cnpj.pipe';
+import { TelefonePipe } from '../../shared/pipes/telefone.pipe';
 
 /** Quantos sócios aparecem antes do "ver todos" (o Itaú, por exemplo, tem 138). */
 const SOCIOS_INICIAIS = 10;
@@ -51,6 +55,12 @@ const SOCIOS_INICIAIS = 10;
     IonIcon,
     IonSkeletonText,
     EstadoComponent,
+    DatePipe,
+    CurrencyPipe,
+    TitleCasePipe,
+    CnpjPipe,
+    CepPipe,
+    TelefonePipe,
   ],
 })
 export class EmpresaDetalhePage {

@@ -33,9 +33,9 @@
     } @else if (empresa(); as e) {
       <section class="perfil">
         <span class="avatar" aria-hidden="true">{{ iniciais(e.razao_social) }}</span>
-        <h1>{{ e.razao_social }}</h1>
+        <h1>{{ e.razao_social | titlecase }}</h1>
         @if (e.nome_fantasia) {
-          <p class="cb-muted">{{ e.nome_fantasia }}</p>
+          <p class="cb-muted">{{ e.nome_fantasia | titlecase }}</p>
         }
         <div class="chips">
           <ion-badge color="medium">{{ e.descricao_situacao_cadastral }}</ion-badge>
@@ -52,15 +52,15 @@
       <div class="resumo">
         <div class="tile">
           <span>CNPJ</span>
-          <strong>{{ e.cnpj }}</strong>
+          <strong>{{ e.cnpj | cnpj }}</strong>
         </div>
         <div class="tile">
           <span>Abertura</span>
-          <strong>{{ e.data_inicio_atividade || '—' }}</strong>
+          <strong>{{ (e.data_inicio_atividade | date: 'dd/MM/yyyy' : 'UTC') || '—' }}</strong>
         </div>
         <div class="tile tile--largo">
           <span>Capital social</span>
-          <strong>{{ e.capital_social }}</strong>
+          <strong>{{ e.capital_social | currency }}</strong>
         </div>
         <div class="tile tile--largo">
           <span>Natureza jurídica</span>
@@ -80,16 +80,16 @@
       <article class="bloco">
         <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
         <div>
-          <p>{{ endereco() || 'Endereço não informado' }}</p>
+          <p>{{ (endereco() | titlecase) || 'Endereço não informado' }}</p>
           @if (e.cep) {
-            <p class="cb-muted">CEP {{ e.cep }}</p>
+            <p class="cb-muted">CEP {{ e.cep | cep }}</p>
           }
         </div>
       </article>
       @if (e.ddd_telefone_1) {
         <article class="bloco">
           <ion-icon name="call-outline" aria-hidden="true"></ion-icon>
-          <p>{{ e.ddd_telefone_1 }}</p>
+          <p>{{ e.ddd_telefone_1 | telefone }}</p>
         </article>
       }
       @if (e.email) {
@@ -112,10 +112,10 @@
             <li>
               <span class="socio__avatar" aria-hidden="true">{{ iniciais(socio.nome_socio) }}</span>
               <div>
-                <strong>{{ socio.nome_socio }}</strong>
+                <strong>{{ socio.nome_socio | titlecase }}</strong>
                 <span class="cb-muted">{{ socio.qualificacao_socio }}</span>
                 @if (socio.data_entrada_sociedade) {
-                  <span class="cb-muted">Desde {{ socio.data_entrada_sociedade }}</span>
+                  <span class="cb-muted">Desde {{ socio.data_entrada_sociedade | date: 'dd/MM/yyyy' : 'UTC' }}</span>
                 }
               </div>
             </li>

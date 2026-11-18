@@ -1,3 +1,4 @@
+import { TitleCasePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -21,6 +22,7 @@ import { BrasilApiService } from '../../core/services/brasil-api.service';
 import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 import { BancoLogoComponent } from '../../shared/components/banco-logo/banco-logo.component';
 import { EstadoComponent } from '../../shared/components/estado/estado.component';
+import { CepPipe } from '../../shared/pipes/cep.pipe';
 
 @Component({
   selector: 'app-banco-detalhe',
@@ -38,6 +40,8 @@ import { EstadoComponent } from '../../shared/components/estado/estado.component
     IonSkeletonText,
     BancoLogoComponent,
     EstadoComponent,
+    TitleCasePipe,
+    CepPipe,
   ],
 })
 export class BancoDetalhePage {

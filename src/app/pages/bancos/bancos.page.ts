@@ -1,3 +1,4 @@
+import { TitleCasePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { InfiniteScrollCustomEvent } from '@ionic/angular';
@@ -51,6 +52,7 @@ const POPULARES = [1, 33, 104, 237, 341, 260, 77, 336];
     IonInfiniteScrollContent,
     BancoLogoComponent,
     EstadoComponent,
+    TitleCasePipe,
   ],
 })
 export class BancosPage {

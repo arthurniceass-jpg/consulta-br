@@ -65,7 +65,7 @@
               }
               {{ e.city }} - {{ e.state }}
             </p>
-            <p class="endereco__cep">CEP {{ e.cep }}</p>
+            <p class="endereco__cep">CEP {{ e.cep | cep }}</p>
           </div>
         </article>
       }
