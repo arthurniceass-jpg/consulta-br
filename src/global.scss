@@ -10,20 +10,20 @@
  */
 
 /* Core CSS required for Ionic components to work properly */
-@import "@ionic/angular/css/core.css";
+@import '@ionic/angular/css/core.css';
 
 /* Basic CSS for apps built with Ionic */
-@import "@ionic/angular/css/normalize.css";
-@import "@ionic/angular/css/structure.css";
-@import "@ionic/angular/css/typography.css";
-@import "@ionic/angular/css/display.css";
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
+@import '@ionic/angular/css/display.css';
 
 /* Optional CSS utils that can be commented out */
-@import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
-@import "@ionic/angular/css/text-alignment.css";
-@import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
+@import '@ionic/angular/css/padding.css';
+@import '@ionic/angular/css/float-elements.css';
+@import '@ionic/angular/css/text-alignment.css';
+@import '@ionic/angular/css/text-transformation.css';
+@import '@ionic/angular/css/flex-utils.css';
 
 /**
  * Ionic Dark Mode
@@ -35,3 +35,55 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+/* ---------------------------------------------------------------------------
+ * Consulta BR — estilos globais reaproveitados pelas telas
+ * ------------------------------------------------------------------------- */
+
+ion-toolbar {
+  --border-width: 0;
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
+
+ion-title {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+ion-card {
+  margin: 0 0 14px;
+  border-radius: var(--cb-radius);
+  box-shadow: var(--cb-shadow);
+  border: 1px solid var(--cb-border);
+}
+
+ion-tab-bar {
+  --border: 1px solid var(--cb-border);
+  height: 62px;
+}
+
+ion-tab-button {
+  font-weight: 600;
+  font-size: 11px;
+}
+
+/* Container central: no desktop o app não estica até as bordas */
+.cb-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.cb-section-title {
+  margin: 24px 4px 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cb-text-muted);
+}
+
+.cb-muted {
+  color: var(--cb-text-muted);
+}
