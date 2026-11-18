@@ -33,32 +33,41 @@
         </ion-input>
         <ion-button (click)="consultar()" [disabled]="buscandoCep()">
           @if (buscandoCep()) {
-          <ion-spinner name="crescent" />
-          } @else { Consultar }
+            <ion-spinner name="crescent" />
+          } @else {
+            Consultar
+          }
         </ion-button>
       </div>
 
       @if (erro()) {
-      <p class="busca__erro" role="alert">
-        <ion-icon name="alert-circle" aria-hidden="true"></ion-icon>
-        {{ erro() }}
-      </p>
-      } @if (tipo() === 'cnpj') {
-      <div class="atalhos">
-        <span class="atalhos__titulo">Experimente:</span>
-        @for (atalho of atalhos; track atalho.cnpj) {
-        <button type="button" class="atalho" (click)="abrirEmpresa(atalho.cnpj)">{{ atalho.nome }}</button>
-        }
-      </div>
-      } @if (endereco(); as e) {
-      <article class="endereco">
-        <div class="endereco__icone"><ion-icon name="location" aria-hidden="true"></ion-icon></div>
-        <div>
-          <p class="endereco__rua">{{ e.street || 'CEP geral do município' }}</p>
-          <p class="cb-muted">@if (e.neighborhood) { {{ e.neighborhood }} · } {{ e.city }} - {{ e.state }}</p>
-          <p class="endereco__cep">CEP {{ e.cep }}</p>
+        <p class="busca__erro" role="alert">
+          <ion-icon name="alert-circle" aria-hidden="true"></ion-icon>
+          {{ erro() }}
+        </p>
+      }
+      @if (tipo() === 'cnpj') {
+        <div class="atalhos">
+          <span class="atalhos__titulo">Experimente:</span>
+          @for (atalho of atalhos; track atalho.cnpj) {
+            <button type="button" class="atalho" (click)="abrirEmpresa(atalho.cnpj)">{{ atalho.nome }}</button>
+          }
         </div>
-      </article>
+      }
+      @if (endereco(); as e) {
+        <article class="endereco">
+          <div class="endereco__icone"><ion-icon name="location" aria-hidden="true"></ion-icon></div>
+          <div>
+            <p class="endereco__rua">{{ e.street || 'CEP geral do município' }}</p>
+            <p class="cb-muted">
+              @if (e.neighborhood) {
+                {{ e.neighborhood }} ·
+              }
+              {{ e.city }} - {{ e.state }}
+            </p>
+            <p class="endereco__cep">CEP {{ e.cep }}</p>
+          </div>
+        </article>
       }
     </section>
 
