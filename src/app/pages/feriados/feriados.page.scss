@@ -1,0 +1,98 @@
+ion-segment {
+  max-width: 688px;
+  margin: 0 auto 8px;
+}
+
+.destaque {
+  background: var(--cb-hero);
+
+  ion-card-title,
+  ion-card-subtitle,
+  ion-card-content {
+    color: #fff;
+  }
+}
+
+.lista {
+  margin: 0 0 14px;
+  padding: 0;
+  overflow: hidden;
+  background: var(--cb-surface);
+  border: 1px solid var(--cb-border);
+  border-radius: var(--cb-radius);
+  box-shadow: var(--cb-shadow);
+
+  ion-list-header {
+    min-height: 40px;
+    margin: 0;
+    border-bottom: 1px solid var(--cb-border);
+  }
+
+  ion-item {
+    --min-height: 68px;
+  }
+
+  ion-item:last-child {
+    --inner-border-width: 0;
+  }
+
+  h3 {
+    font-weight: 700;
+  }
+
+  p {
+    color: var(--cb-text-muted);
+  }
+}
+
+.dia,
+.esqueleto-dia {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-inline-end: 12px;
+  border-radius: var(--cb-radius-sm);
+}
+
+.dia {
+  // O Ionic coloca padding vertical no ion-note[slot=start]; sem zerar, o número desce e o quadrado cola no topo.
+  align-self: center;
+  margin-block: 0;
+  padding: 0;
+  line-height: 1;
+  color: var(--cb-text);
+  background: var(--cb-surface-2);
+  font-size: 22px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.passou {
+  --color: var(--cb-text-muted);
+
+  .dia {
+    color: var(--cb-text-muted);
+  }
+
+  h3 {
+    font-weight: 500;
+  }
+}
+
+.proximo {
+  --background: rgba(var(--ion-color-primary-rgb), 0.12);
+
+  .dia {
+    color: var(--ion-color-primary-contrast);
+    background: var(--ion-color-primary);
+  }
+}
+
+.esqueleto-nome {
+  width: 60%;
+}
+
+.esqueleto-data {
+  width: 40%;
+}
