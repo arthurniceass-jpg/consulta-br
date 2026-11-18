@@ -6,6 +6,45 @@
 
 <ion-content>
   <div class="cb-container">
-    <app-estado icone="construct-outline" titulo="Em construção" mensagem="A equipe chega no próximo PR." />
+    <section class="projeto">
+      <h1>Consulta BR</h1>
+      <p>Projeto de Mobile: app em Ionic + Angular standalone que consome a BrasilAPI.</p>
+      <div class="stack">
+        <span><ion-icon name="phone-portrait-outline" aria-hidden="true"></ion-icon> Ionic 9</span>
+        <span><ion-icon name="logo-angular" aria-hidden="true"></ion-icon> Angular 21</span>
+        <span><ion-icon name="code-slash-outline" aria-hidden="true"></ion-icon> BrasilAPI</span>
+      </div>
+    </section>
+
+    <h2 class="cb-section-title">{{ equipe.length }} integrantes</h2>
+
+    @for (pessoa of equipe; track pessoa.nome; let i = $index) {
+      <article class="pessoa">
+        <header>
+          <span class="avatar" [style.background]="cor(i)" aria-hidden="true">{{ iniciais(pessoa.nome) }}</span>
+          <div>
+            <h3>{{ pessoa.nome }}</h3>
+            <p class="cb-muted">{{ pessoa.papel }}</p>
+          </div>
+        </header>
+
+        <div class="requisitos">
+          @for (requisito of pessoa.requisitos; track requisito) {
+            <span class="requisito">{{ requisito }}</span>
+          }
+        </div>
+
+        <dl>
+          <dt>No código</dt>
+          <dd>
+            @for (arquivo of pessoa.arquivos; track arquivo) {
+              <code>{{ arquivo }}</code>
+            }
+          </dd>
+          <dt>Na tela</dt>
+          <dd>{{ pessoa.telas.join(' · ') }}</dd>
+        </dl>
+      </article>
+    }
   </div>
 </ion-content>
