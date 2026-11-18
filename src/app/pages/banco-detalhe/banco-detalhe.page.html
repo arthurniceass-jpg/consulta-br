@@ -58,9 +58,9 @@
         <article class="sede">
           <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
           <div>
-            <p>{{ enderecoSede() }}</p>
+            <p>{{ logradouroSede() | titlecase }}{{ sufixoUf() }}</p>
             @if (b.headquarters_address?.zipCode) {
-              <p class="cb-muted">CEP {{ b.headquarters_address?.zipCode }}</p>
+              <p class="cb-muted">CEP {{ b.headquarters_address?.zipCode | cep }}</p>
             }
           </div>
         </article>

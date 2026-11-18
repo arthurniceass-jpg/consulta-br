@@ -33,7 +33,7 @@ export const EQUIPE: Integrante[] = [
     papel: 'Formatação dos dados',
     requisitos: ['Pipes personalizadas', 'Pipes do Angular'],
     arquivos: ['shared/pipes'],
-    telas: ['Detalhe da empresa', 'Bancos'],
+    telas: ['Detalhe da empresa', 'Detalhe do banco', 'Bancos', 'Início'],
   },
   {
     nome: 'Lucas Cardoso',
