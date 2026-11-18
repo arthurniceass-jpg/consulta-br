@@ -57,14 +57,21 @@ export class BancoDetalhePage {
   protected readonly naoExiste = signal(false);
   protected readonly banco = signal<Banco | null>(null);
 
-  /** Endereço da sede em uma linha só, pulando as partes vazias. */
-  protected readonly enderecoSede = computed(() => {
+  /** Endereço da sede em uma linha só, sem a UF (para o titlecase não virar "Sp"). */
+  protected readonly logradouroSede = computed(() => {
     const e = this.banco()?.headquarters_address;
     if (!e) return '';
-    return [e.street, e.number, e.complement, e.district, e.city && `${e.city} - ${e.state}`]
-      .filter(Boolean)
-      .join(', ');
+    return [e.street, e.number, e.complement, e.district, e.city].filter(Boolean).join(', ');
   });
+
+  /** " - SP" quando a sede tem cidade e UF. */
+  protected readonly sufixoUf = computed(() => {
+    const e = this.banco()?.headquarters_address;
+    return e?.city && e.state ? ` - ${e.state}` : '';
+  });
+
+  /** Endereço completo da sede, usado no link do mapa. */
+  protected readonly enderecoSede = computed(() => this.logradouroSede() + this.sufixoUf());
 
   /** Link do Google Maps para a sede do banco. */
   protected readonly linkMapa = computed(

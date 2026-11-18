@@ -33,7 +33,7 @@
     } @else if (empresa(); as e) {
       <section class="perfil">
         <span class="avatar" aria-hidden="true">{{ iniciais(e.razao_social) }}</span>
-        <h1>{{ e.razao_social | titlecase }}</h1>
+        <h1>{{ e.razao_social }}</h1>
         @if (e.nome_fantasia) {
           <p class="cb-muted">{{ e.nome_fantasia | titlecase }}</p>
         }
@@ -50,7 +50,7 @@
 
       <h2 class="cb-section-title">Resumo</h2>
       <div class="resumo">
-        <div class="tile">
+        <div class="tile tile--cnpj">
           <span>CNPJ</span>
           <strong>{{ e.cnpj | cnpj }}</strong>
         </div>
@@ -80,7 +80,7 @@
       <article class="bloco">
         <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
         <div>
-          <p>{{ (endereco() | titlecase) || 'Endereço não informado' }}</p>
+          <p>{{ (logradouro() | titlecase) || 'Endereço não informado' }}{{ sufixoUf() }}</p>
           @if (e.cep) {
             <p class="cb-muted">CEP {{ e.cep | cep }}</p>
           }

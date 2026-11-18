@@ -84,15 +84,22 @@ export class EmpresaDetalhePage {
 
   protected readonly temMaisSocios = computed(() => (this.empresa()?.qsa.length ?? 0) > SOCIOS_INICIAIS);
 
-  /** Endereço em uma linha, pulando as partes vazias. */
-  protected readonly endereco = computed(() => {
+  /** Endereço em uma linha sem a UF, pulando as partes vazias. A UF fica de fora para o titlecase não virar "Sp". */
+  protected readonly logradouro = computed(() => {
     const e = this.empresa();
     if (!e) return '';
     const rua = [e.descricao_tipo_de_logradouro, e.logradouro].filter(Boolean).join(' ');
-    return [rua, e.numero, e.complemento, e.bairro, e.municipio && `${e.municipio} - ${e.uf}`]
-      .filter(Boolean)
-      .join(', ');
+    return [rua, e.numero, e.complemento, e.bairro, e.municipio].filter(Boolean).join(', ');
   });
+
+  /** " - SP" quando a empresa tem município e UF. */
+  protected readonly sufixoUf = computed(() => {
+    const e = this.empresa();
+    return e?.municipio && e.uf ? ` - ${e.uf}` : '';
+  });
+
+  /** Endereço completo, usado no link do mapa. */
+  protected readonly endereco = computed(() => this.logradouro() + this.sufixoUf());
 
   protected readonly linkMapa = computed(
     () => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(this.endereco())}`,
