@@ -56,6 +56,11 @@ ion-segment {
 }
 
 .dia {
+  // O Ionic coloca padding vertical no ion-note[slot=start]; sem zerar, o número desce e o quadrado cola no topo.
+  align-self: center;
+  margin-block: 0;
+  padding: 0;
+  line-height: 1;
   color: var(--cb-text);
   background: var(--cb-surface-2);
   font-size: 22px;
