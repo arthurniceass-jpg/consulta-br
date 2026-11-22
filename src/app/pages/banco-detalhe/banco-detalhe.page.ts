@@ -14,13 +14,14 @@ import {
   IonToolbar,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { alertCircleOutline, locationOutline, mapOutline } from 'ionicons/icons';
+import { alertCircleOutline, copyOutline, locationOutline, mapOutline } from 'ionicons/icons';
 
 import type { Banco } from '../../core/models/banco.model';
 import { BrasilApiService } from '../../core/services/brasil-api.service';
 import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 import { BancoLogoComponent } from '../../shared/components/banco-logo/banco-logo.component';
 import { EstadoComponent } from '../../shared/components/estado/estado.component';
+import { CopiarDirective } from '../../shared/directives/copiar.directive';
 
 @Component({
   selector: 'app-banco-detalhe',
@@ -38,6 +39,7 @@ import { EstadoComponent } from '../../shared/components/estado/estado.component
     IonSkeletonText,
     BancoLogoComponent,
     EstadoComponent,
+    CopiarDirective,
   ],
 })
 export class BancoDetalhePage {
@@ -68,7 +70,7 @@ export class BancoDetalhePage {
   );
 
   constructor() {
-    addIcons({ locationOutline, mapOutline, alertCircleOutline });
+    addIcons({ locationOutline, copyOutline, mapOutline, alertCircleOutline });
 
     // Parâmetro de rota: lê o :codigo da URL e carrega o banco correspondente
     this.route.paramMap.pipe(takeUntilDestroyed()).subscribe((params) => {

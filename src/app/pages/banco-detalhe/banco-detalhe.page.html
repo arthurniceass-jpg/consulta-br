@@ -41,11 +41,17 @@
       <dl class="dados">
         <div>
           <dt>Código de compensação</dt>
-          <dd>{{ codigoFormatado() }}</dd>
+          <dd [appCopiar]="codigoFormatado()" title="Clique para copiar o código bancário">
+            {{ codigoFormatado() }}
+            <ion-icon name="copy-outline" aria-hidden="true"></ion-icon>
+          </dd>
         </div>
         <div>
           <dt>ISPB</dt>
-          <dd>{{ b.ispb }}</dd>
+          <dd [appCopiar]="b.ispb" title="Clique para copiar o ISPB">
+            {{ b.ispb }}
+            <ion-icon name="copy-outline" aria-hidden="true"></ion-icon>
+          </dd>
         </div>
         <div>
           <dt>Nome completo</dt>

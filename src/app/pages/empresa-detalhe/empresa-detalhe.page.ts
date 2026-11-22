@@ -19,6 +19,7 @@ import {
   alertCircleOutline,
   briefcaseOutline,
   callOutline,
+  copyOutline,
   chevronDown,
   chevronUp,
   locationOutline,
@@ -31,6 +32,8 @@ import type { Empresa } from '../../core/models/empresa.model';
 import { BrasilApiService } from '../../core/services/brasil-api.service';
 import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 import { EstadoComponent } from '../../shared/components/estado/estado.component';
+import { CopiarDirective } from '../../shared/directives/copiar.directive';
+import { SituacaoDirective } from '../../shared/directives/situacao.directive';
 
 /** Quantos sócios aparecem antes do "ver todos" (o Itaú, por exemplo, tem 138). */
 const SOCIOS_INICIAIS = 10;
@@ -51,6 +54,8 @@ const SOCIOS_INICIAIS = 10;
     IonIcon,
     IonSkeletonText,
     EstadoComponent,
+    SituacaoDirective,
+    CopiarDirective,
   ],
 })
 export class EmpresaDetalhePage {
@@ -93,6 +98,7 @@ export class EmpresaDetalhePage {
       alertCircleOutline,
       briefcaseOutline,
       callOutline,
+      copyOutline,
       chevronDown,
       chevronUp,
       locationOutline,

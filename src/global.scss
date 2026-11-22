@@ -93,3 +93,11 @@ ion-tab-button {
 .cb-muted {
   color: var(--cb-text-muted);
 }
+
+/* Diretiva personalizada: copiar informações */
+.copiar {
+  cursor: pointer;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
