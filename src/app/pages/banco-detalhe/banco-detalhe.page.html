@@ -4,7 +4,17 @@
       <ion-back-button defaultHref="/bancos" text=""></ion-back-button>
     </ion-buttons>
     <ion-title>Banco {{ codigoFormatado() }}</ion-title>
-    <!-- FAVORITO: botão do Juarez -->
+    <ion-buttons slot="end">
+      @if (banco()) {
+        <ion-button
+          [color]="favorito() ? 'secondary' : 'medium'"
+          [attr.aria-label]="favorito() ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
+          (click)="alternarFavorito()"
+        >
+          <ion-icon slot="icon-only" [name]="favorito() ? 'star' : 'star-outline'" aria-hidden="true"></ion-icon>
+        </ion-button>
+      }
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

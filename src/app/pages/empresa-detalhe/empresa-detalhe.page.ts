@@ -14,6 +14,7 @@ import {
   IonSkeletonText,
   IonTitle,
   IonToolbar,
+  ToastController,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import {
@@ -27,11 +28,15 @@ import {
   mailOutline,
   mapOutline,
   peopleOutline,
+  star,
+  starOutline,
 } from 'ionicons/icons';
 
 import type { Empresa } from '../../core/models/empresa.model';
 import { BrasilApiService } from '../../core/services/brasil-api.service';
+import { FavoritosService } from '../../core/services/favoritos.service';
 import { mensagemDeErro } from '../../core/utils/mensagem-erro';
+import { somenteDigitos } from '../../core/utils/somente-digitos';
 import { EstadoComponent } from '../../shared/components/estado/estado.component';
 import { CopiarDirective } from '../../shared/directives/copiar.directive';
 import { SituacaoDirective } from '../../shared/directives/situacao.directive';
@@ -72,6 +77,8 @@ export class EmpresaDetalhePage {
   private readonly api = inject(BrasilApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly favoritos = inject(FavoritosService);
+  private readonly toast = inject(ToastController);
 
   /** CNPJ vindo da URL (/inicio/empresa/:cnpj). */
   protected readonly cnpj = signal('');
@@ -81,6 +88,9 @@ export class EmpresaDetalhePage {
   protected readonly semVolta = signal(false);
   protected readonly empresa = signal<Empresa | null>(null);
   protected readonly mostrarTodosSocios = signal(false);
+
+  /** true quando a empresa aberta está salva nos favoritos (id = CNPJ só com números). */
+  protected readonly favorito = computed(() => this.favoritos.ehFavorito('empresa', somenteDigitos(this.cnpj())));
 
   protected readonly socios = computed(() => {
     const todos = this.empresa()?.qsa ?? [];
@@ -122,6 +132,8 @@ export class EmpresaDetalhePage {
       mailOutline,
       mapOutline,
       peopleOutline,
+      star,
+      starOutline,
     });
 
     // Parâmetro de rota: lê o :cnpj da URL e carrega a empresa
@@ -150,6 +162,26 @@ export class EmpresaDetalhePage {
 
   protected novaBusca(): void {
     this.router.navigate(['/inicio']);
+  }
+
+  /** Estrela do topo: salva/remove a empresa e avisa com um toast rápido. */
+  protected async alternarFavorito(): Promise<void> {
+    const empresa = this.empresa();
+    if (!empresa) return;
+
+    const ficouFavorito = this.favoritos.alternar({
+      tipo: 'empresa',
+      id: somenteDigitos(empresa.cnpj),
+      titulo: empresa.razao_social,
+      subtitulo: empresa.municipio && empresa.uf ? `${empresa.municipio} - ${empresa.uf}` : undefined,
+    });
+
+    const toast = await this.toast.create({
+      message: ficouFavorito ? 'Adicionado aos favoritos' : 'Removido dos favoritos',
+      duration: 1500,
+      position: 'bottom',
+    });
+    await toast.present();
   }
 
   /** Duas primeiras letras do nome, para o avatar ("ITAU UNIBANCO" → "IU"). */
