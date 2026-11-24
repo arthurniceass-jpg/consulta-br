@@ -13,12 +13,14 @@ import {
   IonSkeletonText,
   IonTitle,
   IonToolbar,
+  ToastController,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { alertCircleOutline, copyOutline, locationOutline, mapOutline } from 'ionicons/icons';
+import { alertCircleOutline, copyOutline, locationOutline, mapOutline, star, starOutline } from 'ionicons/icons';
 
 import type { Banco } from '../../core/models/banco.model';
 import { BrasilApiService } from '../../core/services/brasil-api.service';
+import { FavoritosService } from '../../core/services/favoritos.service';
 import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 import { BancoLogoComponent } from '../../shared/components/banco-logo/banco-logo.component';
 import { EstadoComponent } from '../../shared/components/estado/estado.component';
@@ -50,6 +52,8 @@ export class BancoDetalhePage {
   private readonly api = inject(BrasilApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly favoritos = inject(FavoritosService);
+  private readonly toast = inject(ToastController);
 
   /** Código vindo da URL (/bancos/:codigo). */
   protected readonly codigo = signal(0);
@@ -58,6 +62,9 @@ export class BancoDetalhePage {
   /** true quando a API respondeu 404: não adianta tentar de novo. */
   protected readonly naoExiste = signal(false);
   protected readonly banco = signal<Banco | null>(null);
+
+  /** true quando o banco aberto está salvo nos favoritos (reage ao signal do service). */
+  protected readonly favorito = computed(() => this.favoritos.ehFavorito('banco', String(this.codigo())));
 
   /** Endereço da sede em uma linha só, sem a UF (para o titlecase não virar "Sp"). */
   protected readonly logradouroSede = computed(() => {
@@ -81,7 +88,7 @@ export class BancoDetalhePage {
   );
 
   constructor() {
-    addIcons({ locationOutline, copyOutline, mapOutline, alertCircleOutline });
+    addIcons({ locationOutline, copyOutline, mapOutline, alertCircleOutline, star, starOutline });
 
     // Parâmetro de rota: lê o :codigo da URL e carrega o banco correspondente
     this.route.paramMap.pipe(takeUntilDestroyed()).subscribe((params) => {
@@ -108,6 +115,26 @@ export class BancoDetalhePage {
 
   protected voltarParaLista(): void {
     this.router.navigate(['/bancos']);
+  }
+
+  /** Estrela do topo: salva/remove o banco e avisa com um toast rápido. */
+  protected async alternarFavorito(): Promise<void> {
+    const banco = this.banco();
+    if (!banco) return;
+
+    const ficouFavorito = this.favoritos.alternar({
+      tipo: 'banco',
+      id: String(banco.code),
+      titulo: banco.name,
+      subtitulo: this.codigoFormatado(),
+    });
+
+    const toast = await this.toast.create({
+      message: ficouFavorito ? 'Adicionado aos favoritos' : 'Removido dos favoritos',
+      duration: 1500,
+      position: 'bottom',
+    });
+    await toast.present();
   }
 
   protected codigoFormatado(): string {
