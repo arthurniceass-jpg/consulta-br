@@ -93,6 +93,13 @@
   &--largo {
     grid-column: span 2;
   }
+
+  // O CNPJ formatado cabe numa linha só; quebrar no meio ("0001-" / "04") fica estranho.
+  &--cnpj strong {
+    white-space: nowrap;
+    overflow-wrap: normal;
+    letter-spacing: -0.02em;
+  }
 }
 
 .bloco {

@@ -1,3 +1,4 @@
+import { TitleCasePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -22,6 +23,7 @@ import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 import { BancoLogoComponent } from '../../shared/components/banco-logo/banco-logo.component';
 import { EstadoComponent } from '../../shared/components/estado/estado.component';
 import { CopiarDirective } from '../../shared/directives/copiar.directive';
+import { CepPipe } from '../../shared/pipes/cep.pipe';
 
 @Component({
   selector: 'app-banco-detalhe',
@@ -39,6 +41,8 @@ import { CopiarDirective } from '../../shared/directives/copiar.directive';
     IonSkeletonText,
     BancoLogoComponent,
     EstadoComponent,
+    TitleCasePipe,
+    CepPipe,
     CopiarDirective,
   ],
 })
@@ -55,14 +59,21 @@ export class BancoDetalhePage {
   protected readonly naoExiste = signal(false);
   protected readonly banco = signal<Banco | null>(null);
 
-  /** Endereço da sede em uma linha só, pulando as partes vazias. */
-  protected readonly enderecoSede = computed(() => {
+  /** Endereço da sede em uma linha só, sem a UF (para o titlecase não virar "Sp"). */
+  protected readonly logradouroSede = computed(() => {
     const e = this.banco()?.headquarters_address;
     if (!e) return '';
-    return [e.street, e.number, e.complement, e.district, e.city && `${e.city} - ${e.state}`]
-      .filter(Boolean)
-      .join(', ');
+    return [e.street, e.number, e.complement, e.district, e.city].filter(Boolean).join(', ');
   });
+
+  /** " - SP" quando a sede tem cidade e UF. */
+  protected readonly sufixoUf = computed(() => {
+    const e = this.banco()?.headquarters_address;
+    return e?.city && e.state ? ` - ${e.state}` : '';
+  });
+
+  /** Endereço completo da sede, usado no link do mapa. */
+  protected readonly enderecoSede = computed(() => this.logradouroSede() + this.sufixoUf());
 
   /** Link do Google Maps para a sede do banco. */
   protected readonly linkMapa = computed(
