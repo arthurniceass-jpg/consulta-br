@@ -1,0 +1,107 @@
+<ion-content>
+  <header class="hero">
+    <div class="hero__inner">
+      <div class="marca">
+        <span class="marca__logo" aria-hidden="true">BR</span>
+        <span class="marca__nome">Consulta BR</span>
+      </div>
+      <h1>Dados públicos do Brasil na palma da mão</h1>
+      <p>Empresas, CEPs, bancos e feriados em um só lugar.</p>
+    </div>
+  </header>
+
+  <div class="cb-container conteudo">
+    <section class="busca" aria-label="Buscar CNPJ ou CEP">
+      <ion-segment [value]="tipo()" (ionChange)="trocarTipo($event.detail.value)">
+        <ion-segment-button value="cnpj">CNPJ</ion-segment-button>
+        <ion-segment-button value="cep">CEP</ion-segment-button>
+      </ion-segment>
+
+      <div class="busca__campo">
+        <ion-input
+          [value]="termo()"
+          (ionInput)="digitar($event.detail.value)"
+          (keyup.enter)="consultar()"
+          inputmode="numeric"
+          [maxlength]="tipo() === 'cnpj' ? 18 : 9"
+          [placeholder]="tipo() === 'cnpj' ? 'Digite o CNPJ' : 'Digite o CEP'"
+          [attr.aria-label]="tipo() === 'cnpj' ? 'CNPJ' : 'CEP'"
+          fill="outline"
+          clearInput
+        >
+          <ion-icon slot="start" name="search" aria-hidden="true"></ion-icon>
+        </ion-input>
+        <ion-button (click)="consultar()" [disabled]="buscandoCep()">
+          @if (buscandoCep()) {
+            <ion-spinner name="crescent" />
+          } @else {
+            Consultar
+          }
+        </ion-button>
+      </div>
+
+      @if (erro()) {
+        <p class="busca__erro" role="alert">
+          <ion-icon name="alert-circle" aria-hidden="true"></ion-icon>
+          {{ erro() }}
+        </p>
+      }
+      @if (tipo() === 'cnpj') {
+        <div class="atalhos">
+          <span class="atalhos__titulo">Experimente:</span>
+          @for (atalho of atalhos; track atalho.cnpj) {
+            <button type="button" class="atalho" (click)="abrirEmpresa(atalho.cnpj)">{{ atalho.nome }}</button>
+          }
+        </div>
+      }
+      @if (endereco(); as e) {
+        <article class="endereco">
+          <div class="endereco__icone"><ion-icon name="location" aria-hidden="true"></ion-icon></div>
+          <div>
+            <p class="endereco__rua">{{ e.street || 'CEP geral do município' }}</p>
+            <p class="cb-muted">
+              @if (e.neighborhood) {
+                {{ e.neighborhood }} ·
+              }
+              {{ e.city }} - {{ e.state }}
+            </p>
+            <p class="endereco__cep">CEP {{ e.cep | cep }}</p>
+          </div>
+        </article>
+      }
+    </section>
+
+    <h2 class="cb-section-title">Explorar</h2>
+    <nav class="atalhos-grid">
+      <a routerLink="/bancos" class="card-link">
+        <span class="card-link__icone card-link__icone--verde"
+          ><ion-icon name="business" aria-hidden="true"></ion-icon
+        ></span>
+        <strong>Bancos</strong>
+        <span class="cb-muted">Mais de 460 instituições com código e sede</span>
+        <ion-icon class="card-link__seta" name="arrow-forward" aria-hidden="true"></ion-icon>
+      </a>
+      <a routerLink="/feriados" class="card-link">
+        <span class="card-link__icone card-link__icone--amarelo"
+          ><ion-icon name="calendar" aria-hidden="true"></ion-icon
+        ></span>
+        <strong>Feriados</strong>
+        <span class="cb-muted">Feriados nacionais do ano</span>
+        <ion-icon class="card-link__seta" name="arrow-forward" aria-hidden="true"></ion-icon>
+      </a>
+      <a routerLink="/favoritos" class="card-link">
+        <span class="card-link__icone card-link__icone--azul"
+          ><ion-icon name="star" aria-hidden="true"></ion-icon
+        ></span>
+        <strong>Favoritos</strong>
+        <span class="cb-muted">Bancos e empresas que você salvou</span>
+        <ion-icon class="card-link__seta" name="arrow-forward" aria-hidden="true"></ion-icon>
+      </a>
+    </nav>
+
+    <p class="fonte">
+      <ion-icon name="sparkles" aria-hidden="true"></ion-icon>
+      Dados abertos via <a href="https://brasilapi.com.br" target="_blank" rel="noopener">BrasilAPI</a>
+    </p>
+  </div>
+</ion-content>

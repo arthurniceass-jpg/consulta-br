@@ -1,0 +1,12 @@
+<div class="estado" [class.estado--erro]="tom() === 'erro'" role="status">
+  <div class="estado__icone">
+    <ion-icon [name]="icone()" aria-hidden="true"></ion-icon>
+  </div>
+  <h2>{{ titulo() }}</h2>
+  @if (mensagem()) {
+    <p>{{ mensagem() }}</p>
+  }
+  @if (textoAcao()) {
+    <ion-button shape="round" (click)="acao.emit()">{{ textoAcao() }}</ion-button>
+  }
+</div>

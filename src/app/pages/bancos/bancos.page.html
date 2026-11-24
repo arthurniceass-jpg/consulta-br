@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Bancos</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Buscar por nome ou código"
+      [debounce]="250"
+      (ionInput)="buscar($event.detail.value)"
+      [disabled]="carregando() || !!erro()"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="cb-container">
+    @if (carregando()) {
+      <ion-list [inset]="true" class="lista">
+        @for (i of esqueletos; track i) {
+          <ion-item lines="full">
+            <ion-skeleton-text slot="start" [animated]="true" class="esqueleto-logo"></ion-skeleton-text>
+            <ion-label>
+              <ion-skeleton-text [animated]="true" style="width: 60%"></ion-skeleton-text>
+              <ion-skeleton-text [animated]="true" style="width: 85%"></ion-skeleton-text>
+            </ion-label>
+          </ion-item>
+        }
+      </ion-list>
+    } @else if (erro()) {
+      <app-estado
+        tom="erro"
+        icone="cloud-offline-outline"
+        titulo="Não deu para carregar os bancos"
+        [mensagem]="erro()"
+        textoAcao="Tentar de novo"
+        (acao)="carregar()"
+      />
+    } @else {
+      @if (!busca()) {
+        <h2 class="cb-section-title">Populares</h2>
+        <div class="populares">
+          @for (banco of populares(); track banco.code) {
+            <a class="popular" [routerLink]="['/bancos', banco.code]">
+              <app-banco-logo [nome]="banco.name" [codigo]="banco.code" [logoUrl]="banco.logo_url" tamanho="48px" />
+              <span>{{ banco.name }}</span>
+            </a>
+          }
+        </div>
+      }
+
+      <h2 class="cb-section-title">{{ filtrados().length }} {{ filtrados().length === 1 ? 'banco' : 'bancos' }}</h2>
+
+      @if (filtrados().length) {
+        <ion-list [inset]="true" class="lista">
+          @for (banco of visiveis(); track banco.code) {
+            <ion-item [routerLink]="['/bancos', banco.code]" [button]="true" [detail]="true" lines="full">
+              <app-banco-logo slot="start" [nome]="banco.name" [codigo]="banco.code" [logoUrl]="banco.logo_url" />
+              <ion-label>
+                <h3>{{ banco.name }}</h3>
+                <p>{{ banco.fullName }}</p>
+              </ion-label>
+              <ion-note slot="end" class="codigo">{{ codigo(banco) }}</ion-note>
+            </ion-item>
+          }
+        </ion-list>
+
+        <ion-infinite-scroll (ionInfinite)="carregarMais($event)" [disabled]="visiveis().length >= filtrados().length">
+          <ion-infinite-scroll-content loadingText="Carregando mais bancos..."></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      } @else {
+        <app-estado
+          icone="search-outline"
+          titulo="Nenhum banco encontrado"
+          mensagem="Tente outro nome ou o código do banco (ex.: 341)."
+        />
+      }
+    }
+  </div>
+</ion-content>

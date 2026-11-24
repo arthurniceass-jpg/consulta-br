@@ -1,0 +1,94 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Feriados</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment aria-label="Ano dos feriados" [value]="ano()" (ionChange)="trocarAno($event.detail.value)">
+      <!-- Cria um botão para cada ano disponível. -->
+      @for (opcao of anos(); track opcao) {
+        <ion-segment-button [value]="opcao">
+          <ion-label>{{ opcao }}</ion-label>
+        </ion-segment-button>
+      }
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="carregar($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="cb-container">
+    <!-- Mostra o estado atual da consulta. -->
+    @if (carregando()) {
+      <ion-list class="lista" aria-label="Carregando feriados" aria-busy="true">
+        <!-- Exibe seis linhas de carregamento. -->
+        @for (i of esqueletos; track i) {
+          <ion-item>
+            <ion-skeleton-text slot="start" [animated]="true" class="esqueleto-dia"></ion-skeleton-text>
+            <ion-label>
+              <ion-skeleton-text [animated]="true" class="esqueleto-nome"></ion-skeleton-text>
+              <ion-skeleton-text [animated]="true" class="esqueleto-data"></ion-skeleton-text>
+            </ion-label>
+          </ion-item>
+        }
+      </ion-list>
+    } @else if (erro()) {
+      <!-- Oferece uma nova tentativa quando a consulta falha. -->
+      <app-estado
+        tom="erro"
+        icone="cloud-offline-outline"
+        titulo="Não deu para carregar os feriados"
+        [mensagem]="erro()"
+        textoAcao="Tentar de novo"
+        (acao)="carregar()"
+      />
+    } @else {
+      <!-- Exibe o cartão quando há um próximo feriado no ano atual. -->
+      @if (proximo(); as p) {
+        <ion-card class="destaque">
+          <ion-card-header>
+            <ion-card-subtitle>Próximo feriado</ion-card-subtitle>
+            <ion-card-title>{{ p.name }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            {{ p.date + 'T00:00:00Z' | date: 'dd/MM/yyyy' : 'UTC' }} —
+            {{
+              diasAteProximo() === 0
+                ? 'Hoje'
+                : diasAteProximo() === 1
+                  ? 'Falta 1 dia'
+                  : 'Faltam ' + diasAteProximo() + ' dias'
+            }}
+          </ion-card-content>
+        </ion-card>
+      }
+
+      <!-- Cria uma lista para cada mês que tem feriados. -->
+      @for (grupo of porMes(); track grupo.mes) {
+        <ion-list class="lista">
+          <ion-list-header class="cb-section-title">
+            <ion-label>{{ grupo.mes }}</ion-label>
+          </ion-list-header>
+
+          <!-- Exibe cada feriado do mês em uma linha. -->
+          @for (f of grupo.itens; track f.date) {
+            <ion-item [class.passou]="f.date < hoje()" [class.proximo]="f.date === proximo()?.date">
+              <ion-note slot="start" class="dia" aria-hidden="true">
+                {{ f.date + 'T00:00:00Z' | date: 'dd' : 'UTC' }}
+              </ion-note>
+              <ion-label class="ion-text-wrap">
+                <h3>{{ f.name }}</h3>
+                <p>{{ f.date + 'T00:00:00Z' | date: "EEEE, dd 'de' MMMM" : 'UTC' }}</p>
+              </ion-label>
+            </ion-item>
+          }
+        </ion-list>
+      } @empty {
+        <!-- Informa quando a API devolve uma lista vazia. -->
+        <app-estado icone="calendar-outline" titulo="Nenhum feriado encontrado" />
+      }
+    }
+  </div>
+</ion-content>

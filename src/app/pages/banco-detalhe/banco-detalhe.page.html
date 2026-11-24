@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/bancos" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Banco {{ codigoFormatado() }}</ion-title>
+    <!-- FAVORITO: botão do Juarez -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="cb-container">
+    @if (carregando()) {
+      <section class="perfil">
+        <ion-skeleton-text [animated]="true" class="esqueleto-logo"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 50%; height: 22px"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 70%"></ion-skeleton-text>
+      </section>
+      <ion-skeleton-text [animated]="true" class="esqueleto-card"></ion-skeleton-text>
+    } @else if (erro()) {
+      <app-estado
+        tom="erro"
+        icone="alert-circle-outline"
+        titulo="Banco indisponível"
+        [mensagem]="erro()"
+        [textoAcao]="naoExiste() ? 'Ver todos os bancos' : 'Tentar de novo'"
+        (acao)="naoExiste() ? voltarParaLista() : carregar()"
+      />
+    } @else if (banco(); as b) {
+      <section class="perfil">
+        <app-banco-logo [nome]="b.name" [codigo]="b.code" [logoUrl]="b.logo_url" tamanho="88px" />
+        <h1>{{ b.name }}</h1>
+        <p class="cb-muted">{{ b.fullName }}</p>
+        <div class="chips">
+          <span class="chip chip--verde">Código {{ codigoFormatado() }}</span>
+          <span class="chip">ISPB {{ b.ispb }}</span>
+        </div>
+      </section>
+
+      <h2 class="cb-section-title">Dados</h2>
+      <dl class="dados">
+        <div>
+          <dt>Código de compensação</dt>
+          <dd [appCopiar]="codigoFormatado()" title="Clique para copiar o código bancário">
+            {{ codigoFormatado() }}
+            <ion-icon name="copy-outline" aria-hidden="true"></ion-icon>
+          </dd>
+        </div>
+        <div>
+          <dt>ISPB</dt>
+          <dd [appCopiar]="b.ispb" title="Clique para copiar o ISPB">
+            {{ b.ispb }}
+            <ion-icon name="copy-outline" aria-hidden="true"></ion-icon>
+          </dd>
+        </div>
+        <div>
+          <dt>Nome completo</dt>
+          <dd>{{ b.fullName }}</dd>
+        </div>
+      </dl>
+
+      @if (enderecoSede()) {
+        <h2 class="cb-section-title">Sede</h2>
+        <article class="sede">
+          <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
+          <div>
+            <p>{{ logradouroSede() | titlecase }}{{ sufixoUf() }}</p>
+            @if (b.headquarters_address?.zipCode) {
+              <p class="cb-muted">CEP {{ b.headquarters_address?.zipCode | cep }}</p>
+            }
+          </div>
+        </article>
+        <ion-button expand="block" fill="outline" [href]="linkMapa()" target="_blank" rel="noopener">
+          <ion-icon slot="start" name="map-outline" aria-hidden="true"></ion-icon>
+          Ver no mapa
+        </ion-button>
+      }
+    }
+  </div>
+</ion-content>

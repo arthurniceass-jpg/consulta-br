@@ -1,0 +1,149 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/inicio" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Empresa</ion-title>
+    <!-- FAVORITO: botão do Juarez -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="cb-container">
+    @if (carregando()) {
+      <section class="perfil">
+        <ion-skeleton-text [animated]="true" class="esqueleto-avatar"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 70%; height: 22px"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 45%"></ion-skeleton-text>
+      </section>
+      <div class="resumo">
+        @for (i of [1, 2, 3, 4]; track i) {
+          <ion-skeleton-text [animated]="true" class="esqueleto-tile"></ion-skeleton-text>
+        }
+      </div>
+    } @else if (erro()) {
+      <app-estado
+        tom="erro"
+        icone="alert-circle-outline"
+        titulo="Não foi possível consultar"
+        [mensagem]="erro()"
+        [textoAcao]="semVolta() ? 'Fazer outra busca' : 'Tentar de novo'"
+        (acao)="semVolta() ? novaBusca() : carregar()"
+      />
+    } @else if (empresa(); as e) {
+      <section class="perfil">
+        <span class="avatar" aria-hidden="true">{{ iniciais(e.razao_social) }}</span>
+        <h1>{{ e.razao_social }}</h1>
+        @if (e.nome_fantasia) {
+          <p class="cb-muted">{{ e.nome_fantasia | titlecase }}</p>
+        }
+        <div class="chips">
+          <ion-badge [appSituacao]="e.descricao_situacao_cadastral">
+            {{ e.descricao_situacao_cadastral }}
+          </ion-badge>
+          @if (e.descricao_identificador_matriz_filial) {
+            <span class="chip">{{ e.descricao_identificador_matriz_filial }}</span>
+          }
+          @if (e.porte) {
+            <span class="chip">{{ e.porte }}</span>
+          }
+        </div>
+      </section>
+      <h2 class="cb-section-title">Resumo</h2>
+      <div class="resumo">
+        <div class="tile tile--cnpj">
+          <span>CNPJ</span>
+          <strong [appCopiar]="e.cnpj" title="Clique para copiar o CNPJ">
+            {{ e.cnpj | cnpj }}
+            <ion-icon name="copy-outline" aria-hidden="true"></ion-icon>
+          </strong>
+        </div>
+        <div class="tile">
+          <span>Abertura</span>
+          <strong>{{ (e.data_inicio_atividade | date: 'dd/MM/yyyy' : 'UTC') || '—' }}</strong>
+        </div>
+        <div class="tile tile--largo">
+          <span>Capital social</span>
+          <strong>{{ e.capital_social | currency }}</strong>
+        </div>
+        <div class="tile tile--largo">
+          <span>Natureza jurídica</span>
+          <strong>{{ e.natureza_juridica || '—' }}</strong>
+        </div>
+      </div>
+
+      @if (e.cnae_fiscal_descricao) {
+        <h2 class="cb-section-title">Atividade principal</h2>
+        <article class="bloco">
+          <ion-icon name="briefcase-outline" aria-hidden="true"></ion-icon>
+          <p>{{ e.cnae_fiscal_descricao }}</p>
+        </article>
+      }
+
+      <h2 class="cb-section-title">Endereço e contato</h2>
+      <article class="bloco">
+        <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
+        <div>
+          <p>{{ (logradouro() | titlecase) || 'Endereço não informado' }}{{ sufixoUf() }}</p>
+          @if (e.cep) {
+            <p class="cb-muted" [appCopiar]="e.cep" title="Clique para copiar o CEP">
+              CEP {{ e.cep | cep }}
+              <ion-icon name="copy-outline" aria-hidden="true"></ion-icon>
+            </p>
+          }
+        </div>
+      </article>
+      @if (e.ddd_telefone_1) {
+        <article class="bloco">
+          <ion-icon name="call-outline" aria-hidden="true"></ion-icon>
+          <p>{{ e.ddd_telefone_1 | telefone }}</p>
+        </article>
+      }
+      @if (e.email) {
+        <article class="bloco">
+          <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
+          <p class="quebra">{{ e.email }}</p>
+        </article>
+      }
+      @if (endereco()) {
+        <ion-button expand="block" fill="outline" [href]="linkMapa()" target="_blank" rel="noopener">
+          <ion-icon slot="start" name="map-outline" aria-hidden="true"></ion-icon>
+          Ver no mapa
+        </ion-button>
+      }
+
+      <h2 class="cb-section-title">Quadro societário ({{ e.qsa.length }})</h2>
+      @if (e.qsa.length) {
+        <ul class="socios">
+          @for (socio of socios(); track $index) {
+            <li>
+              <span class="socio__avatar" aria-hidden="true">{{ iniciais(socio.nome_socio) }}</span>
+              <div>
+                <strong>{{ socio.nome_socio | titlecase }}</strong>
+                <span class="cb-muted">{{ socio.qualificacao_socio }}</span>
+                @if (socio.data_entrada_sociedade) {
+                  <span class="cb-muted">Desde {{ socio.data_entrada_sociedade | date: 'dd/MM/yyyy' : 'UTC' }}</span>
+                }
+              </div>
+            </li>
+          }
+        </ul>
+        @if (temMaisSocios()) {
+          <ion-button expand="block" fill="clear" (click)="mostrarTodosSocios.set(!mostrarTodosSocios())">
+            <ion-icon
+              slot="end"
+              [name]="mostrarTodosSocios() ? 'chevron-up' : 'chevron-down'"
+              aria-hidden="true"
+            ></ion-icon>
+            {{ mostrarTodosSocios() ? 'Mostrar menos' : 'Ver todos os ' + e.qsa.length + ' sócios' }}
+          </ion-button>
+        }
+      } @else {
+        <article class="bloco">
+          <ion-icon name="people-outline" aria-hidden="true"></ion-icon>
+          <p class="cb-muted">Nenhum sócio informado na Receita Federal.</p>
+        </article>
+      }
+    }
+  </div>
+</ion-content>
