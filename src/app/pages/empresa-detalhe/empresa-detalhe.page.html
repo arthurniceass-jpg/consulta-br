@@ -38,7 +38,9 @@
           <p class="cb-muted">{{ e.nome_fantasia | titlecase }}</p>
         }
         <div class="chips">
-          <ion-badge color="medium">{{ e.descricao_situacao_cadastral }}</ion-badge>
+          <ion-badge [appSituacao]="e.descricao_situacao_cadastral">
+            {{ e.descricao_situacao_cadastral }}
+          </ion-badge>
           @if (e.descricao_identificador_matriz_filial) {
             <span class="chip">{{ e.descricao_identificador_matriz_filial }}</span>
           }
@@ -47,12 +49,14 @@
           }
         </div>
       </section>
-
       <h2 class="cb-section-title">Resumo</h2>
       <div class="resumo">
         <div class="tile tile--cnpj">
           <span>CNPJ</span>
-          <strong>{{ e.cnpj | cnpj }}</strong>
+          <strong [appCopiar]="e.cnpj" title="Clique para copiar o CNPJ">
+            {{ e.cnpj | cnpj }}
+            <ion-icon name="copy-outline" aria-hidden="true"></ion-icon>
+          </strong>
         </div>
         <div class="tile">
           <span>Abertura</span>
@@ -82,7 +86,10 @@
         <div>
           <p>{{ (logradouro() | titlecase) || 'Endereço não informado' }}{{ sufixoUf() }}</p>
           @if (e.cep) {
-            <p class="cb-muted">CEP {{ e.cep | cep }}</p>
+            <p class="cb-muted" [appCopiar]="e.cep" title="Clique para copiar o CEP">
+              CEP {{ e.cep | cep }}
+              <ion-icon name="copy-outline" aria-hidden="true"></ion-icon>
+            </p>
           }
         </div>
       </article>

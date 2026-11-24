@@ -20,6 +20,7 @@ import {
   alertCircleOutline,
   briefcaseOutline,
   callOutline,
+  copyOutline,
   chevronDown,
   chevronUp,
   locationOutline,
@@ -32,6 +33,8 @@ import type { Empresa } from '../../core/models/empresa.model';
 import { BrasilApiService } from '../../core/services/brasil-api.service';
 import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 import { EstadoComponent } from '../../shared/components/estado/estado.component';
+import { CopiarDirective } from '../../shared/directives/copiar.directive';
+import { SituacaoDirective } from '../../shared/directives/situacao.directive';
 import { CepPipe } from '../../shared/pipes/cep.pipe';
 import { CnpjPipe } from '../../shared/pipes/cnpj.pipe';
 import { TelefonePipe } from '../../shared/pipes/telefone.pipe';
@@ -61,6 +64,8 @@ const SOCIOS_INICIAIS = 10;
     CnpjPipe,
     CepPipe,
     TelefonePipe,
+    SituacaoDirective,
+    CopiarDirective,
   ],
 })
 export class EmpresaDetalhePage {
@@ -110,6 +115,7 @@ export class EmpresaDetalhePage {
       alertCircleOutline,
       briefcaseOutline,
       callOutline,
+      copyOutline,
       chevronDown,
       chevronUp,
       locationOutline,
