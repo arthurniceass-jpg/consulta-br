@@ -1,15 +1,92 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Favoritos</ion-title>
+    <ion-title>
+      <span class="titulo">
+        Favoritos
+        <ion-badge>{{ total() }}</ion-badge>
+      </span>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="danger" [disabled]="!total()" (click)="confirmarLimpar()">
+        <ion-icon slot="start" name="trash-outline" aria-hidden="true"></ion-icon>
+        Limpar
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div class="cb-container">
-    <app-estado
-      icone="construct-outline"
-      titulo="Em construção"
-      mensagem="Tela do Guilherme Juarez: bancos e empresas salvos no aparelho."
-    />
+    @if (!total()) {
+      <app-estado
+        icone="star-outline"
+        titulo="Nenhum favorito ainda"
+        mensagem="Toque na estrela nos detalhes de um banco ou de uma empresa para salvar aqui."
+        textoAcao="Ver bancos"
+        (acao)="irParaBancos()"
+      />
+    } @else {
+      <ion-list [inset]="true" class="lista">
+        <ion-list-header>
+          <ion-label>Bancos</ion-label>
+        </ion-list-header>
+
+        @for (item of bancos(); track item.tipo + item.id) {
+          <ion-item-sliding>
+            <ion-item [routerLink]="link(item)" [button]="true" [detail]="true" lines="full">
+              <app-banco-logo slot="start" [nome]="item.titulo" [codigo]="item.id" />
+              <ion-label>
+                <h3>{{ item.titulo }}</h3>
+                @if (item.subtitulo) {
+                  <p>{{ item.subtitulo }}</p>
+                }
+              </ion-label>
+            </ion-item>
+
+            <ion-item-options side="end">
+              <ion-item-option color="danger" (click)="remover(item)" aria-label="Remover dos favoritos">
+                <ion-icon slot="start" name="trash-outline" aria-hidden="true"></ion-icon>
+                Remover
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        } @empty {
+          <ion-item lines="none">
+            <ion-label class="vazio">Nenhum banco favoritado.</ion-label>
+          </ion-item>
+        }
+      </ion-list>
+
+      <ion-list [inset]="true" class="lista">
+        <ion-list-header>
+          <ion-label>Empresas</ion-label>
+        </ion-list-header>
+
+        @for (item of empresas(); track item.tipo + item.id) {
+          <ion-item-sliding>
+            <ion-item [routerLink]="link(item)" [button]="true" [detail]="true" lines="full">
+              <span slot="start" class="avatar" aria-hidden="true">{{ iniciais(item.titulo) }}</span>
+              <ion-label>
+                <h3>{{ item.titulo }}</h3>
+                @if (item.subtitulo) {
+                  <p>{{ item.subtitulo }}</p>
+                }
+              </ion-label>
+            </ion-item>
+
+            <ion-item-options side="end">
+              <ion-item-option color="danger" (click)="remover(item)" aria-label="Remover dos favoritos">
+                <ion-icon slot="start" name="trash-outline" aria-hidden="true"></ion-icon>
+                Remover
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        } @empty {
+          <ion-item lines="none">
+            <ion-label class="vazio">Nenhuma empresa favoritada.</ion-label>
+          </ion-item>
+        }
+      </ion-list>
+    }
   </div>
 </ion-content>
