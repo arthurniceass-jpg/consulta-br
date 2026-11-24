@@ -1,3 +1,4 @@
+import { CurrencyPipe, DatePipe, TitleCasePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -31,6 +32,9 @@ import type { Empresa } from '../../core/models/empresa.model';
 import { BrasilApiService } from '../../core/services/brasil-api.service';
 import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 import { EstadoComponent } from '../../shared/components/estado/estado.component';
+import { CepPipe } from '../../shared/pipes/cep.pipe';
+import { CnpjPipe } from '../../shared/pipes/cnpj.pipe';
+import { TelefonePipe } from '../../shared/pipes/telefone.pipe';
 
 /** Quantos sócios aparecem antes do "ver todos" (o Itaú, por exemplo, tem 138). */
 const SOCIOS_INICIAIS = 10;
@@ -51,6 +55,12 @@ const SOCIOS_INICIAIS = 10;
     IonIcon,
     IonSkeletonText,
     EstadoComponent,
+    DatePipe,
+    CurrencyPipe,
+    TitleCasePipe,
+    CnpjPipe,
+    CepPipe,
+    TelefonePipe,
   ],
 })
 export class EmpresaDetalhePage {
@@ -74,15 +84,22 @@ export class EmpresaDetalhePage {
 
   protected readonly temMaisSocios = computed(() => (this.empresa()?.qsa.length ?? 0) > SOCIOS_INICIAIS);
 
-  /** Endereço em uma linha, pulando as partes vazias. */
-  protected readonly endereco = computed(() => {
+  /** Endereço em uma linha sem a UF, pulando as partes vazias. A UF fica de fora para o titlecase não virar "Sp". */
+  protected readonly logradouro = computed(() => {
     const e = this.empresa();
     if (!e) return '';
     const rua = [e.descricao_tipo_de_logradouro, e.logradouro].filter(Boolean).join(' ');
-    return [rua, e.numero, e.complemento, e.bairro, e.municipio && `${e.municipio} - ${e.uf}`]
-      .filter(Boolean)
-      .join(', ');
+    return [rua, e.numero, e.complemento, e.bairro, e.municipio].filter(Boolean).join(', ');
   });
+
+  /** " - SP" quando a empresa tem município e UF. */
+  protected readonly sufixoUf = computed(() => {
+    const e = this.empresa();
+    return e?.municipio && e.uf ? ` - ${e.uf}` : '';
+  });
+
+  /** Endereço completo, usado no link do mapa. */
+  protected readonly endereco = computed(() => this.logradouro() + this.sufixoUf());
 
   protected readonly linkMapa = computed(
     () => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(this.endereco())}`,
