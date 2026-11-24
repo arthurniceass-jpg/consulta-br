@@ -36,10 +36,18 @@ npm install
 ### Executar a aplicação
 
 ```bash
-npx ionic serve
+npm start
 ```
 
-A aplicação poderá ser acessada pelo endereço local informado no terminal.
+A aplicação poderá ser acessada em `http://localhost:4200`.
+
+### Outros comandos
+
+```bash
+npm run lint       # ESLint, tipos do e2e e Prettier
+npm run test:unit  # testes unitários (Vitest)
+npm run build      # build de produção
+```
 
 ## Funcionalidades
 
@@ -106,7 +114,7 @@ Quando a cópia funciona, o aplicativo exibe uma mensagem verde informando o con
 
 ```html
 <strong [appCopiar]="e.cnpj" title="Clique para copiar o CNPJ">
-  {{ e.cnpj }}
+  {{ e.cnpj | cnpj }}
 </strong>
 ```
 
@@ -180,7 +188,7 @@ O projeto Consulta BR foi desenvolvido em equipe, com divisão de responsabilida
 | Gabriel Fernando | Implementação de pipes personalizadas e utilização de pipes nativas do Angular |
 | Guilherme Juarez | Desenvolvimento do serviço de favoritos e da tela de favoritos |
 | Guilherme Aguiar | Desenvolvimento da tela de feriados utilizando `@if` e `@for` |
-| Arthur Niceas | Coordenação e integração do projeto (responsabilidade específica a confirmar) |
+| Arthur Niceas | Arquitetura, telas e integração com a API |
 
 As funcionalidades foram desenvolvidas em branches separadas e encaminhadas para revisão por meio de Pull Requests no GitHub.
 
@@ -196,7 +204,8 @@ A tabela abaixo apresenta os principais requisitos do projeto, os arquivos relac
 | Consulta de feriados | `pages/feriados/feriados.page.ts` | Feriados |
 | Serviço de favoritos | `core/services/favoritos.service.ts` | Favoritos |
 | Pipe personalizada de CNPJ | `shared/pipes/cnpj.pipe.ts` | Detalhes da empresa |
-| Pipe personalizada de CEP | `shared/pipes/cep.pipe.ts` | Início e detalhes da empresa |
+| Pipe personalizada de CEP | `shared/pipes/cep.pipe.ts` | Início, detalhes da empresa e do banco |
+| Pipe personalizada de telefone | `shared/pipes/telefone.pipe.ts` | Detalhes da empresa |
 | Pipes nativas do Angular | `pages/empresa-detalhe/empresa-detalhe.page.ts` | Detalhes da empresa |
 | Diretiva de situação cadastral | `shared/directives/situacao.directive.ts` | Detalhes da empresa |
 | Diretiva de copiar informações | `shared/directives/copiar.directive.ts` | Detalhes da empresa e do banco |

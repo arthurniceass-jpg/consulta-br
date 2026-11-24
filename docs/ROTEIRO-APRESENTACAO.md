@@ -56,6 +56,7 @@ Mostrar a navegação principal do aplicativo e explicar como as consultas são 
 **Onde estão no código:**
 - `src/app/shared/pipes/cnpj.pipe.ts`
 - `src/app/shared/pipes/cep.pipe.ts`
+- `src/app/shared/pipes/telefone.pipe.ts`
 
 **Pipes nativas:** DatePipe, CurrencyPipe e TitleCasePipe.
 
@@ -63,7 +64,7 @@ Mostrar a navegação principal do aplicativo e explicar como as consultas são 
 
 **Demonstração:**
 1. Consultar uma empresa pelo CNPJ.
-2. Mostrar a formatação do CNPJ e CEP.
+2. Mostrar a formatação do CNPJ, CEP e telefone.
 3. Mostrar datas, valores monetários e nomes formatados.
 
 ### Guilherme Aguiar — Feriados
